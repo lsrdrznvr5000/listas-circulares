@@ -14,6 +14,8 @@ class Ruta {
 
     agregar(nuevo) {
         if (this.primero === null) {
+            nuevo.siguiente = nuevo;
+            nuevo.anterior = nuevo;
             this.primero = nuevo;
         } else if (this.primero.siguiente === null) {
             this.primero.siguiente = nuevo;
@@ -34,22 +36,37 @@ class Ruta {
     }
 
     extraerPrimero() {
+        if (this.primero === null) {
+            return null;
+        }
         const aux = this.primero;
+        if (this.primero.siguiente === this.primero) {
+            this.primero = null;
+            return aux;
+        }
         let ultimo = this.primero.siguiente;
-        this.primero.siguiente = this.primero;
         while (ultimo.siguiente !== this.primero) {
             ultimo = ultimo.siguiente;
         }
-        ultimo.siguiente = this.primero;
-        this.primero.anterior = ultimo;
+        ultimo.siguiente = this.primero.siguiente;
+        this.primero.siguiente.anterior = ultimo;
+        this.primero = this.primero.siguiente;
+        aux.siguiente = null;
+        aux.anterior = null;
         return aux;
     }
 
     listar() {
-        let i = this.primero;
-        while (i.siguiente !== this.primero) {
-            console.log(`Nombre de Base: (${i.nombre}) Minutos: (${i.minutos})`);
-            i = i.siguiente;
+        if (this.primero === null) {
+            return null;
+        } else {
+            let i = this.primero;
+            let txt = "";
+            do {
+                txt += `Nombre de Base: (${i.nombre}) Minutos: (${i.minutos})`;
+                i = i.siguiente;
+            } while (i.siguiente !== this.primero);
+            return txt;
         }
     }
 }
